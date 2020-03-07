@@ -1,0 +1,166 @@
+%% Tutorial 4.2 - Basic Image Manipulation
+%
+% *Goal*
+%   
+% The goal of this tutorial is to explore basic image manipulation
+% techniques using MATLAB and the IPT.
+%
+% *Objectives*    
+% 
+% * Explore the different image types supported by MATLAB and the IPT
+% * Learn how to read images into MATLAB
+% * Explore image conversion
+% * Learn how to display images
+% * Learn how to write images to disk
+%
+% *What you will need*
+% 
+% * coins.png
+% * trees.tif
+% * peppers.png
+% * pout.tif 
+% * cameraman.tif
+%
+%   Copyright 2011 O. Marques
+%   Practical Image and Video Processing Using MATLAB, Wiley-IEEE, 2011.
+%   $Revision: 1.0 Date: 2011/09/28 11:30:00 
+
+%% Step 1
+% Load the image _coins.png_ by executing the following statement.
+
+I = imread('coins.png');
+
+%% Step 2
+% Load the image _trees.tif_.
+
+[X,map] = imread('trees.tif');
+
+%% Step 3
+% Convert the indexed image _X_ with colormap map to an RGB image, _X_rgb_.
+
+X_rgb = ind2rgb(X,map);
+
+%% Step 4
+% Convert the indexed image _X_ with colormap map to an intensity image.
+
+X_gray = ind2gray(X,map);
+
+%% Step 5
+% We can verify that the new intensity image consists of pixel values in
+% the range [0,255].
+
+max(X_gray(:))
+
+%%
+
+min(X_gray(:))
+
+%% Step 6
+% Convert the variable _X_gray_ to class double.
+
+X_gray_dbl = im2double(X_gray);
+
+%% Step 7
+% Use the _imshow_ function (with the _impixelinfo_ option) to display the
+% _coins.png_ image, which is currently loaded in the variable _I_.
+
+imshow(I), impixelinfo
+
+%% Step 8
+% Display the indexed image _trees.tif_. The image data is stored in variable
+% _X_, and the colormap in _map_. Notice that the _impixelinfo_ option provides a
+% clear hint that this is an indexed color image.
+
+imshow(X,map), impixelinfo
+
+%% Step 9
+% Use the _impixel_ function to explore interactively the pixel contents of
+% selected points in the image. Use the mouse to click on the points of
+% interest: normal button clicks are used to select pixels; pressing
+% *Backspace* or *Delete* removes the previously selected pixel; a double-click
+% adds a final pixel and ends the selection; pressing *Return* finishes the
+% selection without adding a final pixel.
+
+RGB = imread('peppers.png');
+[c,r,p] = impixel(RGB);
+
+%% Step 10
+% Use the _improfile_ function to explore the contents of a line in the
+% _coins.png_ image, which is currently loaded in the variable _I_.
+
+r1 = 17; c1 = 18; r2 = 201; c2 = 286;
+imshow(I)
+line([c1, c2], [r1, r2], 'Color', 'g', 'LineWidth', 2);
+figure
+improfile(I, [c1, c2], [r1, r2]);
+ylabel('Gray level');
+
+%% Step 11
+% Use the _imtool_ function to display the currently loaded in the variable
+% _X_rgb_. Notice that a secondary window (Overview) will open as well. Feel
+% free to explore the additional functionality, including the possibility
+% of measuring distances between two points within the image.
+
+imtool(X_rgb)
+
+%% Step 12
+% Close any open figures.
+
+close all
+
+%% Step 13
+% Execute the following statements to create a subplot with two images:
+
+A = imread('pout.tif');
+B = imread('cameraman.tif');
+figure
+subplot(1,2,1), imshow(A)
+subplot(1,2,2), imshow(B)
+
+%% Step 14
+% Close any open figures.
+
+close all
+
+%% Step 15
+% Display the _coins.png_ (loaded in variable _I_) and the _trees.tif_ (loaded in
+% variable _X_ and its colormap in variable _map_) images in a subplot. Execute
+% each statement at a time to see the effect on the images as they are
+% displayed.
+
+figure
+subplot(1,2,1), imshow(I)
+subplot(1,2,2), imshow(X,map)
+
+%% Step 16
+% Use the _subimage_ function to display multiple images with different
+% colormaps.
+
+figure 
+subplot(1,2,1), subimage(I), axis off
+subplot(1,2,2), subimage(X,map), axis off
+
+%% Step 17
+% Manually convert the intensity image _coins_ (loaded in the variable _I_) to
+% an indexed image, and then to RGB. Note that the _trees_ image (loaded in
+% variable _X_ wiht its colormap in variable _map_) has already been converted
+% to RGB in step 3 (saved in variable _X_rgb_).
+
+[I_ind, I_map] = gray2ind(I,256);
+I_rgb = ind2rgb(I_ind,I_map);
+
+%% Step 18
+% Display the truecolor images using the _imshow_ function.
+
+figure
+subplot(1,2,1), imshow(I_rgb)
+subplot(1,2,2), imshow(X_rgb)
+
+%% Step 19
+% Use _imwrite_ to save two of the modified images in this tutorial to
+% files for further use. Use the JPEG format for one of them, and the PNG
+% extension for the other. For example:
+
+imwrite(X_rgb, 'rgb_trees.jpg');
+imwrite(X_gray, 'gray_trees.png');
+

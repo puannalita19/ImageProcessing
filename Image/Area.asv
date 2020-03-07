@@ -1,0 +1,4 @@
+function [c]= sum2num(a,b)
+% comment
+c=a+b;
+end
